@@ -1,0 +1,59 @@
+>db.testtable.find({age : {$gt : 22}}).pretty();
+SELECT * FROM testtable WHERE age > 22;
+
+>db.testtable.find({age : {$gte : 22}}).pretty();
+SELECT * FROM testtable WHERE age >= 22;
+
+>db.testtable.find({age : {$lt : 19}}).pretty();
+SELECT * FROM testtable WHERE age < 19;
+
+>db.testtable.find({age : {$lte : 19}}).pretty();
+SELECT * FROM testtable WHERE age <=19; 
+
+>db.testtable.find({age : {$lt :24, $gt : 17}}).pretty();
+SELECT * FROM testtable WHERE age < 24 and age > 17;
+
+>db.testtable.find({age : {$ne :19}})
+SELECT * FROM testtable WHERE age <>19;
+
+>db.testtable.find({"age" : { $in : [19,20,22,25]}})
+SELECT * FROM testtable WHERE age IN (19,20,22,25); 
+
+>db.testtable.find({"valued_friends_id" : {$nin : ["vinod","janal","nonoj","anant"]}})
+SELECT * FROM testtable WHERE valued_friends_id IN ("vinod","janal","nonoj","anant");
+
+>db.student.find({$and:[{"sex":"Male"},{"grd_point":{ $gte: 31 }},{"class":"VI"}]}).pretty();
+SELECT * FROM student WHERE sex="Male" AND grd_point>=31 AND class="VI";
+
+>db.student.find( {"age": { $not: {$lt : 12}}}).pretty();
+SELECT * FROM student WHERE age>=12;
+
+>db.student.find( {"sex": { $not: /^M.*/}}).pretty();
+SELECT * FROM student WHERE sex NOT LIKE 'M%';
+
+>db.testtable.find({$or : [{"age" : 19},{"age" : 22},{"age":23}]})
+SELECT * FROM testtable WHERE age=19 OR age=22 OR age=23;
+
+>db.testtable.find( { "date_of_join" : "16/10/2010" , $or : [{"age" : 19},{"age" : 22},{"age":23}] } )
+SELECT * FROM testtable WHERE date_of_join= "16/10/2010" and age=19 OR age=22 OR age=23;
+
+>db.testtable.find( { "date_of_join" : "16/10/2010" , $nor : [{"age" : 19},{"age" : 22},{"age":23}] } )
+SELECT * FROM testtable WHERE date_of_join= "16/10/2010" and age not in (19,22,23);
+
+>db.testtable.find({"extra.community_members" : { $exists : false } } ).pretty();
+- exists : false
+	=> If we want to fetch documents from the collection "testtable" where the field "community_members" does NOT exists.
+- exists : true
+	=> If we want to fetch documents from the collection "testtable" where the field "community_members" does exists.
+
+>db.student.find( { f_name: { $regex: 'P.*'} } ).pretty();
+SELECT * FROM student WHERE f_name LIKE 'P%';
+In above if we write 'p' it wont work due to case sensetivity issue.
+To avoid the case sensetivity issue use any one of below four..
+>db.student.find( { f_name: { $regex: 'p.*', $options: 'i' } } ).pretty();
+>db.student.find( { f_name: /p/i } ).pretty();
+>db.student.find( { f_name: /P/ } ).pretty();
+>db.student.find( { f_name: /^p/i } ).pretty();
+
+
+
